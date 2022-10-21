@@ -1,5 +1,7 @@
 #pragma once
-#include "../Vec2.h"
+#include "Vec2.h"
+
+class Enemy;
 
 class Shot
 {
@@ -16,9 +18,20 @@ public:
 	void update();
 	// 表示
 	void draw();
+
+	//弾の進行方向決定
+	void setVec(Vec2 vec) { m_vec = vec; }
+
 	//存在するか
 	bool isExist()const { return m_isExist; }
 	void setExist(bool isExist) { m_isExist = isExist; }
+
+	//存在するか
+	bool isPlayerShot()const { return m_isPlayerShot; }
+	void setPlayerShot(bool isPlayerShot) { m_isPlayerShot = isPlayerShot; }
+
+	//敵との当たり判定
+	bool isCol(Enemy& enemy);
 
 private:
 	// グラフィックハンドル
@@ -29,4 +42,6 @@ private:
 	Vec2	m_pos;
 	// 移動
 	Vec2	m_vec;
+	//プレイヤーが撃った弾かどうか
+	bool m_isPlayerShot;
 };

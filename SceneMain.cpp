@@ -21,6 +21,10 @@ void SceneMain::init()
 	m_player.setHandle(m_hPlayerGraphic);
 	m_player.init();
 
+	m_enemy.setMain(this);
+	m_enemy.setHandle(m_hPlayerGraphic);
+	m_enemy.init();
+
 	m_enemy.setHandle(m_hPlayerGraphic);
 	m_enemy.init();
 
@@ -46,12 +50,10 @@ void SceneMain::update()
 	for (auto& shot : m_shot)
 	{
 		shot.update();
-	}
-
-	// ƒL[“ü—Íˆ—
-	int padState = GetJoypadInputState(DX_INPUT_KEY_PAD1);
-	if (padState & PAD_INPUT_1)
-	{
+		if (shot.isCol(m_enemy))
+		{
+			m_enemy.setExist(false);//‚ ‚½‚Á‚Ä‚¢‚éê‡
+		}
 	}
 }
 
@@ -67,13 +69,21 @@ void SceneMain::draw()
 	}
 }
 
-bool SceneMain::creatShot(Vec2 pos)
+bool SceneMain::creatShot(Vec2 pos,bool isPlayer)
 {
 	for (auto& shot : m_shot)
 	{
 		if (!shot.isExist())
 		{
 			shot.start(pos);
+			Vec2 vec{ 8.0f,0.0f };
+			if (!isPlayer)
+			{
+				vec.x *= -1.0f;
+			}
+			shot.setVec(vec);
+			shot.setPlayerShot(isPlayer);
+
 			return true;
 		}
 	}
